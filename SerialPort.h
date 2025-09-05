@@ -1,16 +1,24 @@
-#pragma once
+// serial.h
+#ifndef SERIAL_H
+#define SERIAL_H
+
 #include <string>
 
-class SerialPort {
+class Serial {
 public:
-    SerialPort(const std::string& portName, int baudRate);
-    bool open();
-    void close();
-    bool isOpen() const;
-    void write(const std::string& data);
-    std::string readLine();
+    Serial(const std::string& port, int baudrate);
+    ~Serial();
+    bool write(const std::string& data);
+    std::string read();
+
 private:
-    std::string portName;
-    int baudRate;
-    bool openFlag;
+    std::string port_;
+    int baudrate_;
+#ifdef _WIN32
+    void* hSerial_; // HANDLE on Windows
+#else
+    int fd_;
+#endif
 };
+
+#endif
